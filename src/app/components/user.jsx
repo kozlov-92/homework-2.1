@@ -15,7 +15,7 @@ const User = ({
     onToggleBookMark
 }) => {
     return (
-        <tr key={_id}>
+        <tr>
             <td>{name}</td>
             <td>
                 {qualities.map((qual) => (
@@ -43,14 +43,14 @@ const User = ({
     );
 };
 User.propTypes = {
-    _id: PropTypes.number.isRequired,
+    _id: PropTypes.string,
     name: PropTypes.string.isRequired,
     qualities: PropTypes.array.isRequired,
-    profession: PropTypes.array.isRequired,
+    profession: PropTypes.object.isRequired,
     completedMeetings: PropTypes.number.isRequired,
     rate: PropTypes.number.isRequired,
     onDelete: PropTypes.func.isRequired,
-    bookmark: PropTypes.func.isRequired,
+    bookmark: PropTypes.func,
     onToggleBookMark: PropTypes.func.isRequired
 };
 
