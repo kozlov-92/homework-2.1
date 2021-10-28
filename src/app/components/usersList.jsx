@@ -8,7 +8,7 @@ import GroupList from "./groupList";
 import SearchStatus from "./searchStatus";
 import _ from "lodash";
 
-const Users = () => {
+const UsersList = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const [professions, setProfession] = useState();
     const [selectedProf, setSelectedProf] = useState();
@@ -119,9 +119,9 @@ const Users = () => {
     }
     return " loading...";
 };
-Users.propTypes = {
+UsersList.propTypes = {
     users: PropTypes.array,
     onDeleteTable: PropTypes.func
 };
 
-export default Users;
+export default UsersList;
