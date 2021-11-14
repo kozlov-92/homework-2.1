@@ -1,18 +1,19 @@
 import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
-import { paginate } from "../utils/paginate";
-import Pagination from "./pagination";
-import UsersTable from "./usersTable";
-import api from "../api";
-import GroupList from "./groupList";
-import SearchStatus from "./searchStatus";
+import { paginate } from "../../../utils/paginate";
+import Pagination from "../../common/pagination";
+import UsersTable from "../../ui/usersTable";
+import api from "../../../api";
+import GroupList from "../.././common/groupList";
+import SearchStatus from "../../ui/searchStatus";
 import _ from "lodash";
 
-const UsersList = () => {
+const UsersListPage = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const [professions, setProfession] = useState();
     const [selectedProf, setSelectedProf] = useState();
     const [sortBy, setSortBy] = useState({ path: "name", order: "asc" });
+    const [searchQuery, setSearchQuery] = useState("");
 
     const pageSize = 6;
 
@@ -45,9 +46,10 @@ const UsersList = () => {
     }, []);
     useEffect(() => {
         setCurrentPage(1);
-    }, [selectedProf]);
+    }, [selectedProf, searchQuery]);
 
     const handleProfessionSelect = (item) => {
+        if (searchQuery !== "") setSearchQuery("");
         setSelectedProf(item);
     };
 
@@ -57,8 +59,21 @@ const UsersList = () => {
     const handleSort = (item) => {
         setSortBy(item);
     };
+
+    const handleSearchQuery = ({ target }) => {
+        setSelectedProf(undefined);
+        setSearchQuery(target.value);
+    };
+
     if (users) {
-        const filteredUsers = selectedProf
+        const filteredUsers = searchQuery
+            ? users.filter(
+                  (user) =>
+                      user.name
+                          .toLowerCase()
+                          .indexOf(searchQuery.toLowerCase()) !== -1
+              )
+            : selectedProf
             ? users.filter(
                   (user) =>
                       JSON.stringify(user.profession) ===
@@ -95,6 +110,13 @@ const UsersList = () => {
                 )}
                 <div className="d-flex flex-column flex-fill">
                     <SearchStatus length={count} />
+                    <input
+                        type="text"
+                        name="searchQuery"
+                        placeholder="Search..."
+                        onChange={handleSearchQuery}
+                        value={searchQuery}
+                    />
                     {count > 0 && (
                         <UsersTable
                             users={usersCrop}
@@ -119,9 +141,9 @@ const UsersList = () => {
     }
     return " loading...";
 };
-UsersList.propTypes = {
+UsersListPage.propTypes = {
     users: PropTypes.array,
     onDeleteTable: PropTypes.func
 };
 
-export default UsersList;
+export default UsersListPage;
